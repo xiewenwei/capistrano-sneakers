@@ -64,7 +64,7 @@ namespace :sneakers do
 
   def stop_sneakers(pid_file)
     if fetch(:sneakers_run_config) == true
-      execute "kill -SIGTERM `cat #{pid_file}`"
+      execute "cd #{current_path} && kill -SIGTERM `cat #{pid_file}`"
     else
       if fetch(:stop_sneakers_in_background, fetch(:sneakers_run_in_background))
         if fetch(:sneakers_use_signals)
@@ -80,7 +80,7 @@ namespace :sneakers do
 
   def quiet_sneakers(pid_file)
     if fetch(:sneakers_use_signals) || fetch(:sneakers_run_config)
-      background "kill -USR1 `cat #{pid_file}`"
+      background "cd #{current_path} && kill -USR1 `cat #{pid_file}`"
     else
       begin
         execute :bundle, :exec, :sneakersctl, 'quiet', "#{pid_file}"
@@ -97,12 +97,12 @@ namespace :sneakers do
       raise "[ set :workers, ['worker1', 'workerN'] ] not configured properly, please configure the workers you wish to use" if fetch(:sneakers_workers).nil? or fetch(:sneakers_workers) == false or !fetch(:sneakers_workers).kind_of? Array
 
       workers = fetch(:sneakers_workers).compact.join(',')
-      
+
       #run "cmd", env: { 'WORKERS' => workers } #export this to environmental variable
       info "Starting the sneakers processes"
       #workers.each do |worker|
 
-      with rails_env: fetch(:sneakers_env), workers: workers do 
+      with rails_env: fetch(:sneakers_env), workers: workers do
         rake 'sneakers:run'
       end
       #execute :bundle, :exec, :sneakers, args.compact.join(' ')
