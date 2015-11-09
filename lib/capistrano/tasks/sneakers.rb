@@ -64,7 +64,7 @@ namespace :sneakers do
 
   def stop_sneakers(pid_file)
     if fetch(:sneakers_run_config) == true
-      execute "cd #{current_path} && kill -SIGTERM `cat #{pid_file}`"
+      execute "cd #{current_path} && kill -TERM `cat #{pid_file}`"
     else
       if fetch(:stop_sneakers_in_background, fetch(:sneakers_run_in_background))
         if fetch(:sneakers_use_signals)
@@ -138,7 +138,9 @@ namespace :sneakers do
   end
 
   task :add_default_hooks do
-    after 'deploy:starting', 'sneakers:quiet'
+    # Disable sneakers:quiet when deploying to prevent process hung up.
+    # Modified by vincent on 2015.11.9
+    #after 'deploy:starting', 'sneakers:quiet'
     after 'deploy:updated', 'sneakers:stop'
     after 'deploy:reverted', 'sneakers:stop'
     after 'deploy:published', 'sneakers:start'
