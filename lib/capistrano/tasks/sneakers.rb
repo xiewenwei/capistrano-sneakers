@@ -197,6 +197,7 @@ namespace :sneakers do
   desc 'Restart sneakers'
   task :restart do
     invoke 'sneakers:stop'
+    sleep 2
     invoke 'sneakers:start'
   end
 
