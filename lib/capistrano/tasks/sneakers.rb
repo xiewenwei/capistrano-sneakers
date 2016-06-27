@@ -154,9 +154,9 @@ namespace :sneakers do
     # Disable sneakers:quiet when deploying to prevent process hung up.
     # Modified by vincent on 2015.11.9
     #after 'deploy:starting', 'sneakers:quiet'
-    after 'deploy:updated', 'sneakers:stop'
-    after 'deploy:reverted', 'sneakers:stop'
-    after 'deploy:published', 'sneakers:start'
+    #after 'deploy:updated', 'sneakers:stop'
+    #after 'deploy:reverted', 'sneakers:stop'
+    #after 'deploy:published', 'sneakers:start'
   end
 
   desc 'Quiet sneakers (stop processing new tasks)'
@@ -196,10 +196,12 @@ namespace :sneakers do
 
   desc 'Restart sneakers'
   task :restart do
+    on roles(:sneakers_server), in: :sequence, wait: 3 do
     invoke 'sneakers:stop'
     sleep 2
     invoke 'sneakers:start'
   end
+ end
 
   desc 'Rolling-restart sneakers'
   task :rolling_restart do
