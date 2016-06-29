@@ -174,8 +174,7 @@ namespace :sneakers do
 
   desc 'Stop sneakers'
   task :stop do
-    on roles(:sneakers_server), in: :sequence, wait: 10 do
-    #on roles fetch(:sneakers_role) do
+    on roles fetch(:sneakers_role) do
       if test("[ -d #{current_path} ]")
         for_each_sneakers_process(true) do |pid_file, idx|
           if sneakers_pid_process_exists?(pid_file)
@@ -197,12 +196,20 @@ namespace :sneakers do
 
   desc 'Restart sneakers'
   task :restart do
-   # on roles(:sneakers_server), in: :sequence, wait: 3 do
-    invoke 'sneakers:stop'
+    on roles(:sneakers_server), in: :sequence  do
+    if test("[ -d #{current_path} ]")
+        for_each_sneakers_process(true) do |pid_file, idx|
+          if sneakers_pid_process_exists?(pid_file)
+            stop_sneakers(pid_file)
+        end
+      end
+    end  
     sleep 1
-    invoke 'sneakers:start'
-  end
-#end
+    for_each_sneakers_process do |pid_file, idx|
+        start_sneakers(pid_file, idx) unless sneakers_pid_process_exists?(pid_file)
+     end
+   end
+ end
 
   desc 'Rolling-restart sneakers'
   task :rolling_restart do
