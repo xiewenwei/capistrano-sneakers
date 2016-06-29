@@ -174,7 +174,7 @@ namespace :sneakers do
 
   desc 'Stop sneakers'
   task :stop do
-    on roles(:sneakers_server), in: :sequence, wait: 5 do
+    on roles(:sneakers_server), in: :sequence, wait: 10 do
     #on roles fetch(:sneakers_role) do
       if test("[ -d #{current_path} ]")
         for_each_sneakers_process(true) do |pid_file, idx|
