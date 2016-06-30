@@ -204,7 +204,7 @@ namespace :sneakers do
         end
       end
     end  
-    sleep 1
+    sleep 3
     for_each_sneakers_process do |pid_file, idx|
         start_sneakers(pid_file, idx) unless sneakers_pid_process_exists?(pid_file)
      end
