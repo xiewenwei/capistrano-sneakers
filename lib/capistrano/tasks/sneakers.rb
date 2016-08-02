@@ -197,7 +197,7 @@ namespace :sneakers do
   desc 'Restart sneakers'
   task :restart do
     on roles(:sneakers_server), in: :sequence  do
-    puts "开始停止sneaker服务"
+    info "开始停止sneaker服务"
     if test("[ -d #{current_path} ]")
         for_each_sneakers_process(true) do |pid_file, idx|
           if sneakers_pid_process_exists?(pid_file)
@@ -205,16 +205,16 @@ namespace :sneakers do
         end
       end
     end  
-    puts "开始启动sneaker服务"
+    info "开始启动sneaker服务"
     for_each_sneakers_process do |pid_file, idx|
         i=0
         while sneakers_pid_process_exists?(pid_file) do
              i+=1
-             puts "sleep 1s"
+             info "sleep 1s"
              sleep 1
-             puts "sleep down"
+             info "sleep down"
              if i > 5 then
-               puts "sneakers启动失败,请查看相关日志和进程"
+               error "sneakers启动失败,请查看相关日志和进程"
                break
             end
         end
