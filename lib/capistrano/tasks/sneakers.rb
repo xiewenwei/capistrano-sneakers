@@ -210,10 +210,10 @@ namespace :sneakers do
         i=0
         while sneakers_pid_process_exists?(pid_file) do
              i+=1
-             info "sleep one second"
+             info "sleep one second, waiting for the old process of quit"
              sleep 1
-             info "sleep down"
-             if i > 5 then
+             info "sleep done"
+             if i > 10 then
                error "sneakers启动失败,请查看相关日志和进程"
                break
             end
