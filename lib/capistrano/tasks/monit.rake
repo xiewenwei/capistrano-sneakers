@@ -2,7 +2,7 @@ namespace :load do
   task :defaults do
     set :monit_bin, '/usr/bin/monit'
     set :sneakers_monit_default_hooks, true
-    set :sneakers_monit_conf_dir, '/etc/monit/conf.d'
+    set :sneakers_monit_conf_dir, '/etc/monit.d'
     set :sneakers_monit_use_sudo, true
     set :sneakers_monit_templates_path, 'config/deploy/templates'
   end
@@ -30,8 +30,8 @@ namespace :sneakers do
         upload_sneakers_template 'sneakers_monit', "#{fetch(:tmp_dir)}/monit.conf", @role
 
         mv_command = "mv #{fetch(:tmp_dir)}/monit.conf #{fetch(:sneakers_monit_conf_dir)}/#{sneakers_monit_service_name}.conf"
-        sudo_if_needed mv_command
-
+        #sudo_if_needed mv_command
+        execute mv_command
         sudo_if_needed "#{fetch(:monit_bin)} reload"
       end
     end

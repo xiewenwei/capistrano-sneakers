@@ -33,7 +33,7 @@ end
 
 namespace :sneakers do
   task :add_default_hooks do
-    after 'deploy:starting',  'sneakers:quiet'
+    #after 'deploy:starting',  'sneakers:quiet'
     after 'deploy:updated',   'sneakers:stop'
     after 'deploy:reverted',  'sneakers:stop'
     after 'deploy:published', 'sneakers:start'
