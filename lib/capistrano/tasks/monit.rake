@@ -5,6 +5,8 @@ namespace :load do
     set :sneakers_monit_conf_dir, '/etc/monit.d'
     set :sneakers_monit_use_sudo, true
     set :sneakers_monit_templates_path, 'config/deploy/templates'
+    # use sneakers_monit_extra to append monit configuration
+    set :sneakers_monit_extra, ''
   end
 end
 
