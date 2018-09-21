@@ -26,17 +26,18 @@ namespace :deploy do
     invoke 'sneakers:add_default_hooks' if fetch(:sneakers_default_hooks)
   end
 
-  after :publishing, :restart_sneakers do
-    invoke 'sneakers:restart' if fetch(:sneakers_default_hooks)
-  end
+  # after :publishing, :restart_sneakers do
+  #   invoke 'sneakers:restart' if fetch(:sneakers_default_hooks)
+  # end
 end
 
 namespace :sneakers do
   task :add_default_hooks do
     #after 'deploy:starting',  'sneakers:quiet'
     after 'deploy:updated',   'sneakers:stop'
-    after 'deploy:reverted',  'sneakers:stop'
     after 'deploy:published', 'sneakers:start'
+    #after 'deploy:failed', 'sneakers:restart'
+    after 'deploy:reverted', 'sneakers:restart'
   end
 
   desc 'Quiet sneakers (stop processing new tasks)'
@@ -87,8 +88,8 @@ namespace :sneakers do
     invoke! 'sneakers:stop'
     # It takes some time to stop serverengine processes and cleanup pidfiles.
     # We should wait until pidfiles will be removed.
-    sleep 5
-    invoke 'sneakers:start'
+    sleep 3
+    invoke! 'sneakers:start'
   end
 
   desc 'Rolling-restart sneakers'
